@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1773126195 source:/media/davod/Lexar/Tareas de sistemas operativos/Fork/main.c
+	<stdio.h>
+	<sys/types.h>
+	<unistd.h>
+	<stdlib.h>
+

@@ -1,0 +1,49 @@
+# depslib dependency file v1.0
+1762192992 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\main.cpp
+	<iostream>
+	<string>
+	"Profesor.h"
+	"ProfeTiempoC.h"
+	"Empleado.h"
+	"EmpleadoCaja.h"
+
+1762192171 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\src\empleado.cpp
+	"Empleado.h"
+	<iostream>
+	<string>
+
+1762191882 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\include\empleado.h
+	<iostream>
+	<string>
+
+1762192178 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\src\profesor.cpp
+	"Profesor.h"
+	<iostream>
+	<string>
+
+1762191752 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\include\profesor.h
+	<iostream>
+	<string>
+
+1762192213 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\src\profetiempoc.cpp
+	"ProfeTiempoC.h"
+	"Profesor.h"
+	<iostream>
+	<string>
+
+1762192966 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\include\profetiempoc.h
+	"Profesor.h"
+	<iostream>
+	<string>
+
+1762193039 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\include\empleadocaja.h
+	<iostream>
+	<string>
+	"Empleado.h"
+
+1762192514 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_herencia_multiple_angeldavidrg\src\empleadocaja.cpp
+	"EmpleadoCaja.h"
+	"Empleado.h"
+	<iostream>
+	<string>
+

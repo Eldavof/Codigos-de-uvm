@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1758563104 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew_david\src\gente.cpp
+	"Gente.h"
+	<iostream>
+	<string>
+
+1758562506 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew_david\include\gente.h
+	<iostream>
+	<string>
+
+1758563377 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew_david\main.cpp
+	<iostream>
+	<string>
+	"Gente.h"
+

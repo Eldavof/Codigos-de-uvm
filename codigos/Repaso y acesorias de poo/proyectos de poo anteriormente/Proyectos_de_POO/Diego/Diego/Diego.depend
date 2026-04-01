@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1756756533 source:c:\proyectos_de_poo\diego\diego\main.cpp
+	<iostream>
+	"El_diego.h"
+
+1756764402 c:\proyectos_de_poo\diego\diego\include\el_diego.h
+	<string>
+
+1756764485 source:c:\proyectos_de_poo\diego\diego\src\el_diego.cpp
+	"El_diego.h"
+	<iostream>
+

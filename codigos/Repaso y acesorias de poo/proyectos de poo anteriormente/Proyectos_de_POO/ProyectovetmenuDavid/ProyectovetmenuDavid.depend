@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1759776095 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectovetmenudavid\main.cpp
+	<iostream>
+	<string>
+	"Animalpro.h"
+
+1759775719 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectovetmenudavid\include\animalpro.h
+	<string>
+	<iostream>
+
+1759775774 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectovetmenudavid\src\animalpro.cpp
+	"Animalpro.h"
+	<string>
+	<iostream>
+

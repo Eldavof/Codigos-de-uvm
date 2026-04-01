@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1757357843 source:c:\proyectos_de_poo\diego\ejemplogetpersona\main.cpp
+	<iostream>
+	<string>
+	"persona.h"
+
+1757357513 c:\proyectos_de_poo\diego\ejemplogetpersona\include\persona.h
+	<iostream>
+	<string>
+

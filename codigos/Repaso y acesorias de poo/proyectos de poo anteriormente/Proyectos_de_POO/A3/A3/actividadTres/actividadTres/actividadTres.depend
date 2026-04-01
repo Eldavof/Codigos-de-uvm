@@ -1,0 +1,49 @@
+# depslib dependency file v1.0
+1758659155 source:c:\users\juliu\onedrive\escritorio\proyectos\actividadtres\main.cpp
+	"Inmueble.h"
+	<iostream>
+	<string>
+
+1758663231 c:\users\juliu\onedrive\escritorio\proyectos\actividadtres\include\inmueble.h
+	<iostream>
+	<string>
+
+1758663144 source:c:\users\juliu\onedrive\escritorio\proyectos\actividadtres\src\inmueble.cpp
+	"Inmueble.h"
+	<iostream>
+
+1758672360 source:c:\users\angel\downloads\actividadtres\actividadtres\main.cpp
+	"Inmueble.h"
+	<iostream>
+	<string>
+
+1758672939 c:\users\angel\downloads\actividadtres\actividadtres\include\inmueble.h
+	<iostream>
+	<string>
+
+1758665512 source:c:\users\angel\downloads\actividadtres\actividadtres\src\inmueble.cpp
+	"Inmueble.h"
+	<iostream>
+
+1758772430 source:c:\users\melan\downloads\actividadtres documentado\actividadtres\actividadtres\main.cpp
+	"Inmueble.h"
+	<iostream>
+	<string>
+	<clocale>
+
+1758770454 c:\users\melan\downloads\actividadtres documentado\actividadtres\actividadtres\include\inmueble.h
+	<iostream>
+	<string>
+
+1758772525 source:c:\users\melan\downloads\actividadtres documentado\actividadtres\actividadtres\src\inmueble.cpp
+	"Inmueble.h"
+	<iostream>
+
+1758772525 source:c:\users\melan\downloads\a3\actividadtres\actividadtres\src\inmueble.cpp
+	"Inmueble.h"
+	<iostream>
+
+1758770454 c:\users\melan\downloads\a3\actividadtres\actividadtres\include\inmueble.h
+	<iostream>
+	<string>
+

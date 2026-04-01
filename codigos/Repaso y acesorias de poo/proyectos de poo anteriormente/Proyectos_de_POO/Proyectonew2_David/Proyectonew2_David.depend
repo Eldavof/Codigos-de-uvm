@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1758566002 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew2_david\main.cpp
+	<iostream>
+	<string>
+	"Persona.h"
+
+1758565191 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew2_david\include\persona.h
+	<iostream>
+	<string>
+
+1758565131 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyectonew2_david\src\persona.cpp
+	"Persona.h"
+	<iostream>
+	<string>
+

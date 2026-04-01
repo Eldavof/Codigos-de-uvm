@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1773610588 source:d:\codigos de metodos numericos\1er parcial\falsa_posicion\falsa_posicion\main.cpp
+	<iostream>
+	<iomanip>
+	<cmath>
+

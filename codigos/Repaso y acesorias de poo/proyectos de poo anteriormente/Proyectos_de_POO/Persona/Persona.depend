@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1757356396 source:c:\proyectos_de_poo\diego\persona\main.cpp
+	<iostream>
+	"Persona_clas.h"
+	<iostream>
+
+1757356368 c:\proyectos_de_poo\diego\persona\include\persona_clas.h
+	<iostream>
+	<string>
+
+1757356396 source:c:\proyectos_de_poo\persona\main.cpp
+	<iostream>
+	"Persona_clas.h"
+	<iostream>
+
+1757356368 c:\proyectos_de_poo\persona\include\persona_clas.h
+	<iostream>
+	<string>
+
+1757356422 source:c:\proyectos_de_poo\persona\src\persona_clas.cpp
+	"Persona_clas.h"
+	<iostream>
+	<string>
+

@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1757353870 source:c:\proyectos_de_poo\diego\gym\main.cpp
+	<iostream>
+	"Entrenador.h"
+
+1757353902 c:\proyectos_de_poo\diego\gym\include\entrenador.h
+	<iostream>
+	<string>
+
+1757353870 source:c:\proyectos_de_poo\gym\main.cpp
+	<iostream>
+	"Entrenador.h"
+
+1757353902 c:\proyectos_de_poo\gym\include\entrenador.h
+	<iostream>
+	<string>
+

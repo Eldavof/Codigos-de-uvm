@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1774566812 source:d:\codigos de metodos numericos\1er parcial\newton_raphson\newton_raphson\main.cpp
+	<iostream>
+	<iomanip>
+	<cmath>
+

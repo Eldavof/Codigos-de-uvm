@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1774716250 source:g:\codigos de metodos numericos\1er parcial\regresion lineal multiple\regresion_lineal_multiple\main.cpp
+	<iostream>
+	<vector>
+	<cmath>
+	<iomanip>
+

@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1773903131 source:/media/davod/Lexar/Tareas de sistemas operativos/Concurrencia_C/Concurrencia_C/main.c
+	<stdio.h>
+	<pthread.h>
+	<semaphore.h>
+	<unistd.h>
+

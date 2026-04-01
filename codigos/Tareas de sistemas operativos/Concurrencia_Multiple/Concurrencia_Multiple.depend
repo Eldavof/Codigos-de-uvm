@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1773167329 source:/media/davod/Lexar/Tareas de sistemas operativos/Concurrencia_Multiple/main.c
+	<stdio.h>
+	<unistd.h>
+

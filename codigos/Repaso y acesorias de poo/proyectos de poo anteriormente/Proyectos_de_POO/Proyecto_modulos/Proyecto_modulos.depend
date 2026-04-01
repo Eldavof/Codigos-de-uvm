@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1760985782 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_modulos\main.cpp
+	<iostream>
+	<string>
+	<clocale>
+	"Servicios.h"
+
+1760984716 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_modulos\src\servicios.cpp
+	"Servicios.h"
+	<iostream>
+	<clocale>
+
+1760982115 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\proyecto_modulos\include\servicios.h
+

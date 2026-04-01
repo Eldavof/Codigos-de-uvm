@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1584205420 source:e:\repaso y acesorias de poo\tienda_repaso\main.cpp
+	<iostream>
+
+1584205420 
+
+1773120807 source:/media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/src/Tienda.cpp
+	"Tienda.h"
+	<vector>
+	<string>
+	"Producto.h"
+	"Empleado.h"
+	<iostream>
+
+1773120905 /media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/include/Tienda.h
+	<Producto.h>
+	<Empleado.h>
+	<vector>
+	<string>
+	<iostream>
+
+1773120807 /media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/include/Producto.h
+	<iostream>
+	<vector>
+	<string>
+
+1773120807 /media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/include/Empleado.h
+	<iostream>
+	<vector>
+	<string>
+
+1773120807 source:/media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/src/Empleado.cpp
+	"Empleado.h"
+	<iostream>
+	<vector>
+	<string>
+	<iostream>
+
+1773120807 source:/media/davod/Lexar/Repaso y acesorias de poo/Tienda_Repaso/src/Producto.cpp
+	"Producto.h"
+	<iostream>
+	<vector>
+	<string>
+

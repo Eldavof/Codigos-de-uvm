@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1760379802 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\src\medico.cpp
+	"Medico.h"
+	<iostream>
+	<string>
+
+1760379056 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\include\medico.h
+	<iostream>
+	<string>
+
+1760380590 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\main.cpp
+	<iostream>
+	"Consultorio.h"
+	<string>
+	<clocale>
+
+1760377146 c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\include\consultorio.h
+	<iostream>
+	<string>
+	"Medico.h"
+
+1760379823 source:c:\users\angel\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\src\consultorio.cpp
+	"Consultorio.h"
+	<iostream>
+	<string>
+
+1760408661 source:c:\users\pc\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\src\consultorio.cpp
+	"Consultorio.h"
+	<iostream>
+	<string>
+
+1760408661 c:\users\pc\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\include\consultorio.h
+	<iostream>
+	<string>
+	"Medico.h"
+
+1760408661 c:\users\pc\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\include\medico.h
+	<iostream>
+	<string>
+
+1760408661 source:c:\users\pc\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\src\medico.cpp
+	"Medico.h"
+	<iostream>
+	<string>
+
+1760408661 source:c:\users\pc\onedrive - universidad del valle de méxico s.c\tercer semestre\programacion orientada a objetos\proyectos_de_poo\asociacion\main.cpp
+	<iostream>
+	"Consultorio.h"
+	<string>
+	<clocale>
+
