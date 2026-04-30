@@ -1146,21 +1146,22 @@ def _sustituir_columna(A, b, col):
 def _imprimir_matriz_cramer(A, b, n):
     """Imprime [A | b] adaptando el ancho a sistemas grandes."""
     ancho_col = 9 if n <= 6 else 7
-    fmt       = f"{{:>{ancho_col}.4g}}"
+    fmt_num   = f"{{:>{ancho_col}.4g}}"   # numeros
+    fmt_str   = f"{{:>{ancho_col}}}"      # texto
 
     print("  Matriz aumentada [A | b]:")
     linea()
     enc = "        "
     for j in range(n):
-        enc += fmt.format(f"x{j+1}")
-    enc += "  |" + fmt.format("b")
+        enc += fmt_str.format(f"x{j+1}")
+    enc += "  |" + fmt_str.format("b")
     print(enc)
     linea()
     for i in range(n):
         fila = f"  Ec.{i+1:<3}"
         for v in A[i]:
-            fila += fmt.format(v)
-        fila += "  |" + fmt.format(b[i])
+            fila += fmt_num.format(v)
+        fila += "  |" + fmt_num.format(b[i])
         print(fila)
     linea()
 
@@ -1168,14 +1169,15 @@ def _imprimir_matriz_cramer(A, b, n):
 def _mostrar_matriz_pequeña(M, n, etiqueta=""):
     """Imprime una matriz n×n con etiqueta opcional."""
     ancho_col = 9 if n <= 6 else 7
-    fmt       = f"{{:>{ancho_col}.4g}}"
+    fmt_num   = f"{{:>{ancho_col}.4g}}"   # numeros
+    fmt_str   = f"{{:>{ancho_col}}}"      # texto
     if etiqueta:
         print(f"  {etiqueta}")
     linea("·")
     for i in range(n):
         fila = "    │"
         for v in M[i]:
-            fila += fmt.format(v)
+            fila += fmt_num.format(v)
         fila += "  │"
         print(fila)
     linea("·")
