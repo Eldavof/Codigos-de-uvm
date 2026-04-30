@@ -54,15 +54,17 @@ def menu_principal():
         print("  [2]  Gauss-Seidel")
         print("  [3]  Diagonal Dominante  (verificar / acomodar)")
         print("  [4]  Despejar ecuaciones  →  forma matricial")
+        print("  [5]  Determinantes  (Regla de Cramer)  hasta 10×10")
         print("  [0]  Salir")
         print()
         linea()
-        op = pedir_opcion(["0", "1", "2", "3", "4"])
+        op = pedir_opcion(["0", "1", "2", "3", "4", "5"])
 
         if   op == "1": menu_jacobi()
         elif op == "2": menu_seidel()
         elif op == "3": menu_diagonal_dominante()
         elif op == "4": menu_despeje()
+        elif op == "5": menu_determinantes()
         elif op == "0":
             print("\n  ¡Hasta luego!\n")
             sys.exit(0)
@@ -1086,6 +1088,196 @@ def _flujo_despeje():
         print(f"     Las variables se mapean como: "
               + ", ".join(f"{v}=x{i+1}" for i, v in enumerate(variables)))
     pausa()
+
+
+# ══════════════════════════════════════════════
+#  DETERMINANTES — REGLA DE CRAMER  (hasta 10×10)
+# ══════════════════════════════════════════════
+
+estado_cramer = {
+    "n": None,
+    "A": None,
+    "b": None,
+}
+
+
+def _determinante(M):
+    """
+    Calcula el determinante de la matriz cuadrada M usando
+    eliminación gaussiana con pivoteo parcial.
+    Funciona para cualquier tamaño n×n sin librerías externas.
+    """
+    n   = len(M)
+    mat = [fila[:] for fila in M]
+    det = 1.0
+
+    for col in range(n):
+        max_fila = col
+        for fila in range(col + 1, n):
+            if abs(mat[fila][col]) > abs(mat[max_fila][col]):
+                max_fila = fila
+
+        if max_fila != col:
+            mat[col], mat[max_fila] = mat[max_fila], mat[col]
+            det *= -1
+
+        pivote = mat[col][col]
+        if abs(pivote) < 1e-14:
+            return 0.0
+
+        det *= pivote
+        for fila in range(col + 1, n):
+            factor = mat[fila][col] / pivote
+            for k in range(col, n):
+                mat[fila][k] -= factor * mat[col][k]
+
+    return det
+
+
+def _sustituir_columna(A, b, col):
+    """Devuelve una nueva matriz con la columna col reemplazada por b."""
+    n = len(A)
+    M = [fila[:] for fila in A]
+    for i in range(n):
+        M[i][col] = b[i]
+    return M
+
+
+def _imprimir_matriz_cramer(A, b, n):
+    """Imprime [A | b] adaptando el ancho a sistemas grandes."""
+    ancho_col = 9 if n <= 6 else 7
+    fmt       = f"{{:>{ancho_col}.4g}}"
+
+    print("  Matriz aumentada [A | b]:")
+    linea()
+    enc = "        "
+    for j in range(n):
+        enc += fmt.format(f"x{j+1}")
+    enc += "  |" + fmt.format("b")
+    print(enc)
+    linea()
+    for i in range(n):
+        fila = f"  Ec.{i+1:<3}"
+        for v in A[i]:
+            fila += fmt.format(v)
+        fila += "  |" + fmt.format(b[i])
+        print(fila)
+    linea()
+
+
+def _mostrar_matriz_pequeña(M, n, etiqueta=""):
+    """Imprime una matriz n×n con etiqueta opcional."""
+    ancho_col = 9 if n <= 6 else 7
+    fmt       = f"{{:>{ancho_col}.4g}}"
+    if etiqueta:
+        print(f"  {etiqueta}")
+    linea("·")
+    for i in range(n):
+        fila = "    │"
+        for v in M[i]:
+            fila += fmt.format(v)
+        fila += "  │"
+        print(fila)
+    linea("·")
+
+
+def resolver_cramer(estado):
+    print()
+    titulo("  RESOLVIENDO — REGLA DE CRAMER  ")
+
+    if estado["n"] is None:
+        print("\n  ⚠  Primero define el tamaño (Opción 1).")
+        pausa(); return
+    if estado["A"] is None:
+        print("\n  ⚠  Primero ingresa los coeficientes (Opción 2).")
+        pausa(); return
+
+    n = estado["n"]
+    A = estado["A"]
+    b = estado["b"]
+
+    det_A = _determinante(A)
+
+    print()
+    _imprimir_matriz_cramer(A, b, n)
+    print()
+
+    if n <= 4:
+        _mostrar_matriz_pequeña(A, n, "Matriz A:")
+    print(f"  det(A) = {det_A:.6f}")
+
+    if abs(det_A) < 1e-14:
+        print()
+        print("  ✘  det(A) = 0 → el sistema no tiene solución única.")
+        print("     Puede ser incompatible o tener infinitas soluciones.")
+        pausa(); return
+
+    print()
+    linea()
+    print("  Calculando det(Ai) para cada variable xi ...")
+    linea()
+
+    soluciones = []
+    for i in range(n):
+        Mi    = _sustituir_columna(A, b, i)
+        det_i = _determinante(Mi)
+        xi    = det_i / det_A
+        soluciones.append(xi)
+
+        if n <= 4:
+            _mostrar_matriz_pequeña(Mi, n, f"A{i+1}  (col {i+1} <- b):")
+        print(f"  det(A{i+1}) = {det_i:>14.6f}   ->   x{i+1} = {det_i:.6f} / {det_A:.6f} = {xi:.8f}")
+        print()
+
+    linea("=")
+    print("  SOLUCION:")
+    linea("=")
+    for i, xi in enumerate(soluciones):
+        print(f"    x{i+1} = {xi:.8f}")
+    linea("=")
+
+    print()
+    print("  Verificacion  Ax = b:")
+    linea()
+    print(f"  {'Ec.':>4}  {'Ax calculado':>18}  {'b esperado':>12}  {'Error abs.':>12}")
+    linea()
+    for i in range(n):
+        ax  = sum(A[i][j] * soluciones[j] for j in range(n))
+        err = abs(ax - b[i])
+        print(f"  Ec.{i+1}  {ax:>18.6f}  {b[i]:>12.6f}  {err:>12.2e}")
+    linea()
+    pausa()
+
+
+def menu_determinantes():
+    est = estado_cramer
+    while True:
+        print()
+        titulo("  DETERMINANTES — REGLA DE CRAMER  ")
+        print()
+        print("  Resuelve sistemas Ax = b usando la Regla de Cramer.")
+        print("  Muestra det(A), cada det(Ai) y las soluciones xi = det(Ai)/det(A).")
+        print()
+        print("  [1]  Ingresar / cambiar tamano del sistema  (hasta 10x10)")
+        print("  [2]  Ingresar coeficientes")
+        print("  [3]  Resolver por Cramer")
+        print("  [0]  Volver al menu principal")
+        print()
+
+        if est["n"]:
+            cargado = "OK coeficientes cargados" if est["A"] else "sin coeficientes"
+            print(f"  Sistema: {est['n']}x{est['n']}   {cargado}")
+        else:
+            print("  Sistema: no definido aun")
+
+        print()
+        linea()
+        op = pedir_opcion(["0", "1", "2", "3"])
+
+        if   op == "0": break
+        elif op == "1": menu_tamano(est)
+        elif op == "2": menu_coeficientes(est)
+        elif op == "3": resolver_cramer(est)
 
 
 # ══════════════════════════════════════════════
