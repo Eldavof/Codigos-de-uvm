@@ -55,16 +55,18 @@ def menu_principal():
         print("  [3]  Diagonal Dominante  (verificar / acomodar)")
         print("  [4]  Despejar ecuaciones  →  forma matricial")
         print("  [5]  Determinantes  (Regla de Cramer)  hasta 10×10")
+        print("  [6]  Matriz Inversa  —  x = A⁻¹·b  hasta 10×10")
         print("  [0]  Salir")
         print()
         linea()
-        op = pedir_opcion(["0", "1", "2", "3", "4", "5"])
+        op = pedir_opcion(["0", "1", "2", "3", "4", "5", "6"])
 
         if   op == "1": menu_jacobi()
         elif op == "2": menu_seidel()
         elif op == "3": menu_diagonal_dominante()
         elif op == "4": menu_despeje()
         elif op == "5": menu_determinantes()
+        elif op == "6": menu_inversa()
         elif op == "0":
             print("\n  ¡Hasta luego!\n")
             sys.exit(0)
@@ -1280,6 +1282,228 @@ def menu_determinantes():
         elif op == "1": menu_tamano(est)
         elif op == "2": menu_coeficientes(est)
         elif op == "3": resolver_cramer(est)
+
+
+
+# ══════════════════════════════════════════════
+#  MATRIZ INVERSA  —  x = A⁻¹ · b  (hasta 10×10)
+# ══════════════════════════════════════════════
+
+estado_inversa = {
+    "n": None,
+    "A": None,
+    "b": None,
+}
+
+
+def _matriz_inversa(A):
+    """
+    Calcula A⁻¹ usando eliminación de Gauss-Jordan con pivoteo parcial.
+    Devuelve la inversa o lanza ValueError si la matriz es singular.
+    Sin librerías externas.
+    """
+    n   = len(A)
+    # Construir matriz aumentada [A | I]
+    aug = [A[i][:] + [1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
+
+    for col in range(n):
+        # Pivoteo parcial
+        max_fila = max(range(col, n), key=lambda r: abs(aug[r][col]))
+        if abs(aug[max_fila][col]) < 1e-14:
+            raise ValueError("La matriz es singular (det = 0). No tiene inversa.")
+        if max_fila != col:
+            aug[col], aug[max_fila] = aug[max_fila], aug[col]
+
+        # Normalizar fila pivote
+        pivote = aug[col][col]
+        aug[col] = [v / pivote for v in aug[col]]
+
+        # Eliminar en todas las demás filas
+        for fila in range(n):
+            if fila == col:
+                continue
+            factor = aug[fila][col]
+            aug[fila] = [aug[fila][k] - factor * aug[col][k] for k in range(2 * n)]
+
+    # Extraer la parte derecha = A⁻¹
+    return [fila[n:] for fila in aug]
+
+
+def _imprimir_matriz_cuadrada(M, n, titulo_col=None, etiqueta=""):
+    """Imprime una matriz n×n con encabezado y etiqueta opcionales."""
+    ancho = 10 if n <= 5 else 8 if n <= 7 else 7
+    fmt_n = f"{{:>{ancho}.5f}}"
+    fmt_s = f"{{:>{ancho}}}"
+
+    if etiqueta:
+        print(f"\n  {etiqueta}")
+    linea("·")
+    if titulo_col:
+        enc = "      "
+        for t in titulo_col:
+            enc += fmt_s.format(t)
+        print(enc)
+        linea("·")
+    for i in range(n):
+        fila = f"  f{i+1}  "
+        for v in M[i]:
+            fila += fmt_n.format(v)
+        print(fila)
+    linea("·")
+
+
+def _mul_matriz_vector(M, v, n):
+    """Multiplica matriz M (n×n) por vector v (n). Devuelve vector resultado."""
+    return [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+
+
+def resolver_inversa(estado):
+    print()
+    titulo("  RESOLVIENDO — MATRIZ INVERSA  ")
+
+    if estado["n"] is None:
+        print("\n  Primero define el tamano (Opcion 1).")
+        pausa(); return
+    if estado["A"] is None:
+        print("\n  Primero ingresa los coeficientes (Opcion 2).")
+        pausa(); return
+
+    n = estado["n"]
+    A = estado["A"]
+    b = estado["b"]
+
+    headers = [f"c{j+1}" for j in range(n)]
+
+    # ── Mostrar sistema original ──────────────
+    print()
+    ancho = 10 if n <= 5 else 8 if n <= 7 else 7
+    fmt_n = f"{{:>{ancho}.4g}}"
+    fmt_s = f"{{:>{ancho}}}"
+
+    print("  Sistema  Ax = b:")
+    linea()
+    enc = "        "
+    for j in range(n):
+        enc += fmt_s.format(f"x{j+1}")
+    enc += f"  |{fmt_s.format('b')}"
+    print(enc)
+    linea()
+    for i in range(n):
+        fila = f"  Ec.{i+1:<3}"
+        for v in A[i]:
+            fila += fmt_n.format(v)
+        fila += f"  |{fmt_n.format(b[i])}"
+        print(fila)
+    linea()
+
+    # ── Calcular A⁻¹ ─────────────────────────
+    print()
+    print("  Paso 1: Calcular A⁻¹  (Gauss-Jordan con pivoteo parcial)")
+    print()
+    try:
+        inv_A = _matriz_inversa(A)
+    except ValueError as e:
+        print(f"\n  ERROR: {e}")
+        pausa(); return
+
+    _imprimir_matriz_cuadrada(inv_A, n, titulo_col=headers, etiqueta="A⁻¹ =")
+
+    # ── Calcular x = A⁻¹ · b ─────────────────
+    print()
+    print("  Paso 2: Calcular x = A⁻¹ · b")
+    print()
+    x = _mul_matriz_vector(inv_A, b, n)
+
+    # Mostrar el producto columna por columna (solo si n <= 5 para no saturar)
+    if n <= 5:
+        linea("·")
+        col_b_ancho = 8
+        fmt_b = f"{{:>{col_b_ancho}.4g}}"
+        print(f"  {'A⁻¹':^{ancho*n}}    {'b':^{col_b_ancho}}    {'x':^10}")
+        linea("·")
+        for i in range(n):
+            fila_inv = "  "
+            for v in inv_A[i]:
+                fila_inv += fmt_n.format(v)
+            fila_inv += f"  x  {fmt_b.format(b[i])}  =  {x[i]:>10.6f}"
+            print(fila_inv)
+        linea("·")
+    else:
+        # Para sistemas grandes solo mostrar el resultado
+        linea("·")
+        for i in range(n):
+            print(f"  x{i+1} = {x[i]:>14.8f}")
+        linea("·")
+
+    # ── Resultado final ───────────────────────
+    print()
+    linea("=")
+    print("  SOLUCION  x = A⁻¹ · b :")
+    linea("=")
+    for i, xi in enumerate(x):
+        print(f"    x{i+1} = {xi:.8f}")
+    linea("=")
+
+    # ── Verificación ──────────────────────────
+    print()
+    print("  Verificacion  Ax = b:")
+    linea()
+    print(f"  {'Ec.':>4}  {'Ax calculado':>18}  {'b esperado':>12}  {'Error abs.':>12}")
+    linea()
+    for i in range(n):
+        ax  = sum(A[i][j] * x[j] for j in range(n))
+        err = abs(ax - b[i])
+        print(f"  Ec.{i+1}  {ax:>18.6f}  {b[i]:>12.6f}  {err:>12.2e}")
+    linea()
+
+    # ── Verificar A·A⁻¹ ≈ I ─────────────────
+    print()
+    print("  Verificacion  A * A⁻¹ = I  (error max por elemento):")
+    max_err_I = 0.0
+    for i in range(n):
+        for j in range(n):
+            prod = sum(A[i][k] * inv_A[k][j] for k in range(n))
+            esperado = 1.0 if i == j else 0.0
+            max_err_I = max(max_err_I, abs(prod - esperado))
+    print(f"  Error maximo = {max_err_I:.2e}")
+    if max_err_I < 1e-8:
+        print("  A * A⁻¹ es identidad. Inversa correcta.")
+    else:
+        print("  Advertencia: error alto. El sistema puede estar mal condicionado.")
+    linea()
+    pausa()
+
+
+def menu_inversa():
+    est = estado_inversa
+    while True:
+        print()
+        titulo("  MATRIZ INVERSA  —  x = A⁻¹·b  ")
+        print()
+        print("  Resuelve Ax = b calculando primero A⁻¹ por Gauss-Jordan,")
+        print("  luego obtiene x = A⁻¹ · b.")
+        print("  Muestra A⁻¹ completa, el producto y la verificacion A·A⁻¹ = I.")
+        print()
+        print("  [1]  Ingresar / cambiar tamano del sistema  (hasta 10x10)")
+        print("  [2]  Ingresar coeficientes")
+        print("  [3]  Resolver por matriz inversa")
+        print("  [0]  Volver al menu principal")
+        print()
+
+        if est["n"]:
+            cargado = "OK coeficientes cargados" if est["A"] else "sin coeficientes"
+            print(f"  Sistema: {est['n']}x{est['n']}   {cargado}")
+        else:
+            print("  Sistema: no definido aun")
+
+        print()
+        linea()
+        op = pedir_opcion(["0", "1", "2", "3"])
+
+        if   op == "0": break
+        elif op == "1": menu_tamano(est)
+        elif op == "2": menu_coeficientes(est)
+        elif op == "3": resolver_inversa(est)
 
 
 # ══════════════════════════════════════════════
