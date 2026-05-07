@@ -525,9 +525,10 @@ estado_seidel = {
     "n": None, "A": None, "b": None, "x0": None,
     "tol": 0.001, "max_iter": 100, "resultado": None,
 }
-estado_diagonal = {"n": None, "A": None, "b": None}
-estado_cramer   = {"n": None, "A": None, "b": None}
-estado_inversa  = {"n": None, "A": None, "b": None}
+estado_diagonal     = {"n": None, "A": None, "b": None}
+estado_cramer       = {"n": None, "A": None, "b": None}
+estado_inversa      = {"n": None, "A": None, "b": None}
+estado_gauss_jordan = {"n": None, "A": None, "b": None}
 
 # ── Utilidades de matrices ─────────────────────────────────────────
 def imprimir_matriz(A, b, n):
@@ -1561,6 +1562,135 @@ def menu_inversa():
         elif op == "3": resolver_inversa(est)
 
 # ── Menú del 2do Parcial ──────────────────────────────────────────
+# ── Gauss-Jordan ──────────────────────────────────────────────────
+def resolver_gauss_jordan(estado):
+    print()
+    titulo("  RESOLVIENDO — GAUSS-JORDAN  ")
+    if estado["n"] is None:
+        print("\n  ⚠  Primero define el tamaño (Opción 1)."); pausa(); return
+    if estado["A"] is None:
+        print("\n  ⚠  Primero ingresa los coeficientes (Opción 2)."); pausa(); return
+
+    n = estado["n"]
+    # Construir matriz aumentada [A | b]
+    aug = [estado["A"][i][:] + [estado["b"][i]] for i in range(n)]
+
+    ancho = 10 if n <= 5 else 8 if n <= 7 else 7
+    fmt_n = f"{{:>{ancho}.4g}}"
+    fmt_s = f"{{:>{ancho}}}"
+
+    def imprimir_aug(mat, etiqueta=""):
+        if etiqueta:
+            print(f"\n  {etiqueta}")
+        linea("·")
+        enc = "        "
+        for j in range(n):
+            enc += fmt_s.format(f"x{j+1}")
+        enc += fmt_s.format("| b")
+        print(enc)
+        linea("·")
+        for i in range(n):
+            fila = f"  Ec.{i+1:<3}"
+            for j in range(n):
+                fila += fmt_n.format(mat[i][j])
+            fila += "  |" + fmt_n.format(mat[i][n])
+            print(fila)
+        linea("·")
+
+    print()
+    print("  Sistema inicial  [A | b]:")
+    imprimir_aug(aug)
+
+    paso = 1
+    for col in range(n):
+        # Pivoteo parcial
+        max_fila = col
+        for fila in range(col + 1, n):
+            if abs(aug[fila][col]) > abs(aug[max_fila][col]):
+                max_fila = fila
+        if abs(aug[max_fila][col]) < 1e-14:
+            print(f"\n  ✘  Columna {col+1} es cero: el sistema no tiene solución única.")
+            pausa(); return
+        if max_fila != col:
+            aug[col], aug[max_fila] = aug[max_fila], aug[col]
+            print(f"\n  ── Paso {paso}: intercambiar fila {col+1} ↔ fila {max_fila+1}  (pivoteo parcial)")
+            paso += 1
+            imprimir_aug(aug)
+
+        # Normalizar fila pivote
+        pivote = aug[col][col]
+        aug[col] = [v / pivote for v in aug[col]]
+        print(f"\n  ── Paso {paso}: normalizar fila {col+1}  (÷ {pivote:.4g})")
+        paso += 1
+        imprimir_aug(aug)
+
+        # Eliminar en TODAS las demás filas (arriba y abajo)
+        for fila in range(n):
+            if fila == col:
+                continue
+            factor = aug[fila][col]
+            if abs(factor) < 1e-14:
+                continue
+            aug[fila] = [aug[fila][k] - factor * aug[col][k] for k in range(n + 1)]
+            signo = "+" if factor >= 0 else "-"
+            print(f"\n  ── Paso {paso}: fila {fila+1}  ←  fila {fila+1}  {signo}  ({abs(factor):.4g}) × fila {col+1}")
+            paso += 1
+            imprimir_aug(aug)
+
+    # Extraer soluciones
+    x = [aug[i][n] for i in range(n)]
+
+    print()
+    linea("=")
+    print("  SOLUCIÓN  (forma reducida escalonada):")
+    linea("=")
+    for i, xi in enumerate(x):
+        print(f"    x{i+1} = {xi:.8f}")
+    linea("=")
+
+    print()
+    print("  Verificación  Ax = b:")
+    linea()
+    print(f"  {'Ec.':>4}  {'Ax calculado':>18}  {'b esperado':>12}  {'Error abs.':>12}")
+    linea()
+    A_orig = estado["A"]
+    b_orig = estado["b"]
+    for i in range(n):
+        ax  = sum(A_orig[i][j] * x[j] for j in range(n))
+        err = abs(ax - b_orig[i])
+        print(f"  Ec.{i+1}  {ax:>18.6f}  {b_orig[i]:>12.6f}  {err:>12.2e}")
+    linea()
+    pausa()
+
+def menu_gauss_jordan():
+    est = estado_gauss_jordan
+    while True:
+        print()
+        titulo("  GAUSS-JORDAN  ")
+        print()
+        print("  Resuelve Ax = b por eliminación de Gauss-Jordan:")
+        print("  convierte [A|b] en la forma identidad reducida [I|x].")
+        print("  Muestra cada paso: pivoteo, normalización y eliminación.")
+        print()
+        print("  [1]  Ingresar / cambiar tamaño del sistema  (hasta 10×10)")
+        print("  [2]  Ingresar coeficientes")
+        print("  [3]  Resolver paso a paso")
+        print("  [0]  Volver")
+        print()
+        if est["n"]:
+            cargado = "✔ coeficientes cargados" if est["A"] else "✘ sin coeficientes"
+            print(f"  Sistema: {est['n']}×{est['n']}   {cargado}")
+        else:
+            print("  Sistema: no definido aún")
+        print()
+        linea()
+        op = pedir_opcion(["0", "1", "2", "3"])
+        if   op == "0": break
+        elif op == "1": menu_tamano(est)
+        elif op == "2": menu_coeficientes(est)
+        elif op == "3": resolver_gauss_jordan(est)
+
+# ── Menú del 2do Parcial ──────────────────────────────────────────
 def menu_segundo_parcial():
     while True:
         print()
@@ -1572,16 +1702,18 @@ def menu_segundo_parcial():
         print("  [4]  Despejar ecuaciones  →  forma matricial")
         print("  [5]  Determinantes  (Regla de Cramer)  hasta 10×10")
         print("  [6]  Matriz Inversa  —  x = A⁻¹·b  hasta 10×10")
+        print("  [7]  Gauss-Jordan  —  eliminación paso a paso")
         print("  [0]  ← Volver al menú principal")
         print()
         linea()
-        op = pedir_opcion(["0", "1", "2", "3", "4", "5", "6"])
+        op = pedir_opcion(["0", "1", "2", "3", "4", "5", "6", "7"])
         if   op == "1": menu_jacobi()
         elif op == "2": menu_seidel()
         elif op == "3": menu_diagonal_dominante()
         elif op == "4": menu_despeje()
         elif op == "5": menu_determinantes()
         elif op == "6": menu_inversa()
+        elif op == "7": menu_gauss_jordan()
         elif op == "0": break
 
 
@@ -1600,7 +1732,7 @@ def menu_principal():
         print("║                          Regresión, Lagrange...)             ║")
         print("║                                                              ║")
         print("║   [2]  📗  2do PARCIAL  (Jacobi, Seidel, Cramer,            ║")
-        print("║                          Matriz Inversa, Despeje...)         ║")
+        print("║                          Matriz Inversa, Gauss-Jordan...)    ║")
         print("║                                                              ║")
         print("║   [0]  🚪  Salir                                             ║")
         print("║                                                              ║")
