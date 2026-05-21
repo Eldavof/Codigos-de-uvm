@@ -1,7 +1,7 @@
 """
 ╔══════════════════════════════════════════════════════════════════╗
-║        MÉTODOS NUMÉRICOS — HERRAMIENTA COMPLETA                 ║
-║              1er Parcial  +  2do Parcial                        ║
+║        MÉTODOS NUMÉRICOS — HERRAMIENTA COMPLETA                  ║
+║              1er Parcial  +  2do Parcial                         ║
 ╚══════════════════════════════════════════════════════════════════╝
 """
 
@@ -1535,18 +1535,74 @@ def resolver_inversa(estado):
     linea()
     pausa()
 
+def _submatriz(M, fila_eliminar, col_eliminar):
+    """Devuelve la matriz resultante de eliminar una fila y columna específica."""
+    return [fila[:col_eliminar] + fila[col_eliminar+1:] for i, fila in enumerate(M) if i != fila_eliminar]
+
+def resolver_inversa_cofactores(estado):
+    print()
+    titulo("  RESOLVIENDO — INVERSA POR COFACTORES  ")
+    if estado["n"] is None:
+        print("\n  ⚠  Primero define el tamaño (Opción 1)."); pausa(); return
+    if estado["A"] is None:
+        print("\n  ⚠  Primero ingresa los coeficientes (Opción 2)."); pausa(); return
+
+    n = estado["n"]
+    A = estado["A"]
+    b = estado["b"]
+
+    print("\n  Paso 1: Calcular la determinante de A, det(A)")
+    det_A = _determinante(A)
+    print(f"  det(A) = {det_A:.6f}\n")
+
+    if abs(det_A) < 1e-14:
+        print("  ✘  det(A) = 0 → La matriz es singular, no tiene inversa única.")
+        pausa(); return
+
+    print("  Paso 2: Calcular la Matriz de Cofactores (C)")
+    print("  (Aquí puedes ver los cofactores individuales como C11, C12, etc.)")
+    C = [[0.0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            sub_M = _submatriz(A, i, j)
+            det_sub = _determinante(sub_M)
+            signo = 1 if (i + j) % 2 == 0 else -1
+            C[i][j] = signo * det_sub
+
+    _imprimir_matriz_cuadrada(C, n, etiqueta="Matriz de Cofactores (C):")
+
+    print("\n  Paso 3: Calcular la Matriz Adjunta (C^T)")
+    print("  (Es la transpuesta de la Matriz de Cofactores)")
+    Adj = [[C[j][i] for j in range(n)] for i in range(n)]
+    _imprimir_matriz_cuadrada(Adj, n, etiqueta="Matriz Adjunta (Adj(A)):")
+
+    print("\n  Paso 4: Calcular la Inversa A⁻¹ = (1 / det(A)) * Adj(A)")
+    inv_A = [[Adj[i][j] / det_A for j in range(n)] for i in range(n)]
+    _imprimir_matriz_cuadrada(inv_A, n, etiqueta="Matriz Inversa (A⁻¹):")
+
+    print("\n  Paso 5: Calcular x = A⁻¹ · b")
+    x = _mul_matriz_vector(inv_A, b, n)
+
+    linea("=")
+    print("  SOLUCIÓN  x = A⁻¹ · b :")
+    linea("=")
+    for i, xi in enumerate(x):
+        print(f"    x{i+1} = {xi:.8f}")
+    linea("=")
+    pausa()
+
 def menu_inversa():
     est = estado_inversa
     while True:
         print()
         titulo("  MATRIZ INVERSA  —  x = A⁻¹·b  ")
         print()
-        print("  Resuelve Ax = b calculando primero A⁻¹ por Gauss-Jordan,")
-        print("  luego obtiene x = A⁻¹ · b.")
+        print("  Resuelve Ax = b calculando primero A⁻¹.")
         print()
         print("  [1]  Ingresar / cambiar tamaño del sistema  (hasta 10x10)")
         print("  [2]  Ingresar coeficientes")
-        print("  [3]  Resolver por matriz inversa")
+        print("  [3]  Resolver por matriz inversa (Método Gauss-Jordan)")
+        print("  [4]  Resolver por matriz inversa (Método Cofactores) ✨ NUEVO")
         print("  [0]  Volver")
         print()
         if est["n"]:
@@ -1556,11 +1612,12 @@ def menu_inversa():
             print("  Sistema: no definido aun")
         print()
         linea()
-        op = pedir_opcion(["0", "1", "2", "3"])
+        op = pedir_opcion(["0", "1", "2", "3", "4"])
         if   op == "0": break
         elif op == "1": menu_tamano(est)
         elif op == "2": menu_coeficientes(est)
         elif op == "3": resolver_inversa(est)
+        elif op == "4": resolver_inversa_cofactores(est)
 
 # ── Eliminación Gaussiana (con sustitución regresiva) ────────────
 estado_gauss_elim = {"n": None, "A": None, "b": None}
@@ -1872,7 +1929,7 @@ def menu_principal():
     while True:
         print()
         print("╔══════════════════════════════════════════════════════════════╗")
-        print("║       MÉTODOS NUMÉRICOS — HERRAMIENTA COMPLETA              ║")
+        print("║       MÉTODOS NUMÉRICOS — HERRAMIENTA COMPLETA               ║")
         print("╠══════════════════════════════════════════════════════════════╣")
         print("║                                                              ║")
         print("║   [1]  📘  1er PARCIAL  (Errores, Taylor, Raíces,           ║")
@@ -1880,9 +1937,9 @@ def menu_principal():
         print("║                                                              ║")
         print("║   [2]  📗  2do PARCIAL  (Jacobi, Seidel, Cramer,            ║")
         print("║                          Matriz Inversa, Gauss-Jordan,       ║")
-        print("║                          Eliminación Gaussiana...)            ║")
+        print("║                          Eliminación Gaussiana...)           ║")
         print("║                                                              ║")
-        print("║   [0]  🚪  Salir                                             ║")
+        print("║   [0]  🚪  Salir                                            ║")
         print("║                                                              ║")
         print("╚══════════════════════════════════════════════════════════════╝")
         print()
