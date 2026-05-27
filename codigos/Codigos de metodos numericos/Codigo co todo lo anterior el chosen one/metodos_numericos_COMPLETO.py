@@ -1,7 +1,7 @@
 """
 ╔══════════════════════════════════════════════════════════════════╗
 ║        MÉTODOS NUMÉRICOS — HERRAMIENTA COMPLETA                  ║
-║              1er Parcial  +  2do Parcial                         ║
+║       1er Parcial  +  2do Parcial +  3er Parcial                 ║
 ╚══════════════════════════════════════════════════════════════════╝
 """
 
