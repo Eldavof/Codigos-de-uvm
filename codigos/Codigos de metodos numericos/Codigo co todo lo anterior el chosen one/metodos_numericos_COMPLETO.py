@@ -473,6 +473,158 @@ def lagrange():
         print(f"\n--- 3. EVALUACIÓN EN x = {xp} ---")
         print(f"f_{N}({xp}) = {resultado:.4f}")
 
+# ── 12. Integración Numérica (Trapecio, Simpson 1/3, Romberg) ─────
+def _trapecio_num(f_callable, a, b, n):
+    """Trapecio múltiple — usado también por Romberg."""
+    h = (b - a) / n
+    suma = f_callable(a) + f_callable(b)
+    for i in range(1, n):
+        suma += 2 * f_callable(a + i * h)
+    return (b - a) * suma / (2 * n)
+
+def integracion_trapecio():
+    limpiar()
+    print("∫  REGLA DEL TRAPECIO  (Aplicación Múltiple)")
+    print("-" * 50)
+    print("Fórmula: I ≈ (b-a)/(2n) · [f(x0) + 2f(x1) + ... + 2f(x_{n-1}) + f(xn)]\n")
+    expr_str = input("Ingresa f(x) [ej: exp(x**2)]: ").strip()
+    f_sym = sympify(expr_str)
+    f_num = lambda val: float(f_sym.subs(x, val))
+    a = pedir_float("  Límite inferior a: ")
+    b = pedir_float("  Límite superior b: ")
+    n = pedir_entero("  Número de segmentos n: ")
+
+    h = (b - a) / n
+    encabezados = ["i", "xi", "f(xi)", "Coef.", "Término"]
+    filas = []
+
+    suma = 0.0
+    for i in range(n + 1):
+        xi = a + i * h
+        fxi = f_num(xi)
+        if i == 0 or i == n:
+            coef, term = 1, fxi
+        else:
+            coef, term = 2, 2 * fxi
+        suma += term
+        filas.append([i, f"{xi:.6f}", f"{fxi:.6f}", coef, f"{term:.6f}"])
+
+    resultado = (b - a) * suma / (2 * n)
+    imprimir_tabla(encabezados, filas)
+    print(f"\n  h = (b - a)/n = ({b} - {a})/{n} = {h:.6f}")
+    print(f"\n  I ≈ ({b-a})/(2·{n}) · {suma:.6f}")
+    print(f"\n  ╔══════════════════════════╗")
+    print(f"  ║  Resultado: {resultado:.6f}  ║")
+    print(f"  ╚══════════════════════════╝")
+    pausa()
+
+def integracion_simpson13():
+    limpiar()
+    print("∫  REGLA DE SIMPSON 1/3  (Aplicación Múltiple)")
+    print("-" * 50)
+    print("Condición: n debe ser NÚMERO PAR")
+    print("Fórmula: I ≈ (b-a)/(3n) · [f(x0) + 4f(x1) + 2f(x2) + 4f(x3) + ... + f(xn)]\n")
+    expr_str = input("Ingresa f(x) [ej: exp(x**2)]: ").strip()
+    f_sym = sympify(expr_str)
+    f_num = lambda val: float(f_sym.subs(x, val))
+    a = pedir_float("  Límite inferior a: ")
+    b = pedir_float("  Límite superior b: ")
+    n = pedir_entero("  Número de segmentos n (par): ")
+
+    if n % 2 != 0:
+        print("\n  ⚠️  n debe ser par. Ajustando a n+1...")
+        n += 1
+        print(f"  → Usando n = {n}")
+
+    h = (b - a) / n
+    encabezados = ["i", "xi", "f(xi)", "Coef.", "Término"]
+    filas = []
+
+    suma = 0.0
+    for i in range(n + 1):
+        xi = a + i * h
+        fxi = f_num(xi)
+        if i == 0 or i == n:
+            coef, term = 1, fxi
+        elif i % 2 != 0:
+            coef, term = 4, 4 * fxi
+        else:
+            coef, term = 2, 2 * fxi
+        suma += term
+        filas.append([i, f"{xi:.6f}", f"{fxi:.6f}", coef, f"{term:.6f}"])
+
+    resultado = (b - a) * suma / (3 * n)
+    imprimir_tabla(encabezados, filas)
+    print(f"\n  h = (b - a)/n = ({b} - {a})/{n} = {h:.6f}")
+    print(f"\n  I ≈ ({b-a})/(3·{n}) · {suma:.6f}")
+    print(f"\n  ╔══════════════════════════╗")
+    print(f"  ║  Resultado: {resultado:.6f}  ║")
+    print(f"  ╚══════════════════════════╝")
+    pausa()
+
+def integracion_romberg():
+    limpiar()
+    print("∫  INTEGRACIÓN DE ROMBERG")
+    print("-" * 50)
+    print("Combina el método del Trapecio con la Extrapolación de Richardson.")
+    print("Cada columna extra aumenta el orden de precisión.\n")
+    expr_str = input("Ingresa f(x) [ej: exp(x**2)]: ").strip()
+    f_sym = sympify(expr_str)
+    f_num = lambda val: float(f_sym.subs(x, val))
+    a = pedir_float("  Límite inferior a: ")
+    b = pedir_float("  Límite superior b: ")
+    niveles = pedir_entero("  Número de niveles (ej. 4): ", 2, 10)
+
+    # Construir matriz de Romberg
+    I = [[0.0] * niveles for _ in range(niveles)]
+
+    print("\n── Paso 1: columna Trapecio ─────────────────────")
+    for k in range(niveles):
+        n_segs = 2 ** k
+        I[k][0] = _trapecio_num(f_num, a, b, n_segs)
+        print(f"  I[{k}][0] — n={n_segs:>4} segmentos → {I[k][0]:.8f}")
+
+    print("\n── Paso 2: Extrapolación de Richardson ──────────")
+    for k in range(1, niveles):
+        for j in range(1, k + 1):
+            I[k][j] = (4**j * I[k][j-1] - I[k-1][j-1]) / (4**j - 1)
+            print(f"  I[{k}][{j}] = (4^{j}·{I[k][j-1]:.6f} - {I[k-1][j-1]:.6f}) / (4^{j}-1) = {I[k][j]:.8f}")
+
+    # Imprimir la tabla triangular completa
+    print("\n── Matriz de Romberg ────────────────────────────")
+    encabezados = [f"O(h^{2*(j+1)})" for j in range(niveles)]
+    encabezados[0] = "Trapecio"
+    filas_tabla = []
+    for k in range(niveles):
+        fila = []
+        for j in range(niveles):
+            fila.append(f"{I[k][j]:.6f}" if I[k][j] != 0.0 else "—")
+        filas_tabla.append(fila)
+    imprimir_tabla(encabezados, filas_tabla)
+
+    mejor = I[niveles-1][niveles-1]
+    print(f"\n  ╔══════════════════════════════════════╗")
+    print(f"  ║  Mejor estimación: {mejor:.8f}  ║")
+    print(f"  ╚══════════════════════════════════════╝")
+    pausa()
+
+def menu_integracion():
+    while True:
+        print()
+        titulo("  ∫  INTEGRACIÓN NUMÉRICA  ")
+        print()
+        print("  [1]  Regla del Trapecio     (aplicación múltiple)")
+        print("  [2]  Regla de Simpson 1/3   (aplicación múltiple)")
+        print("  [3]  Integración de Romberg (extrapolación Richardson)")
+        print("  [0]  ← Volver")
+        print()
+        linea()
+        op = pedir_opcion(["0", "1", "2", "3"])
+        if   op == "1": integracion_trapecio()
+        elif op == "2": integracion_simpson13()
+        elif op == "3": integracion_romberg()
+        elif op == "0": break
+
 # ── Menú del 1er Parcial ──────────────────────────────────────────
 def menu_primer_parcial():
     opciones = {
@@ -487,6 +639,7 @@ def menu_primer_parcial():
         "9":  ("Generador de Despejes g(x)",            generador_despejes),
         "10": ("Regresión Lineal Múltiple",             regresion_lineal_multiple),
         "11": ("Polinomios de Lagrange",                lagrange),
+        "12": ("Integración Numérica  (Trapecio / Simpson 1/3 / Romberg)", menu_integracion),
     }
 
     while True:
@@ -1933,7 +2086,8 @@ def menu_principal():
         print("╠══════════════════════════════════════════════════════════════╣")
         print("║                                                              ║")
         print("║   [1]  📘  1er PARCIAL  (Errores, Taylor, Raíces,           ║")
-        print("║                          Regresión, Lagrange...)             ║")
+        print("║                          Regresión, Lagrange,                ║")
+        print("║                          Trapecio, Simpson 1/3, Romberg...)  ║")
         print("║                                                              ║")
         print("║   [2]  📗  2do PARCIAL  (Jacobi, Seidel, Cramer,            ║")
         print("║                          Matriz Inversa, Gauss-Jordan,       ║")
