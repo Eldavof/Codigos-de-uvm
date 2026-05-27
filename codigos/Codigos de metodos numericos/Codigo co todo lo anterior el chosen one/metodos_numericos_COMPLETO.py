@@ -608,22 +608,6 @@ def integracion_romberg():
     print(f"  ╚══════════════════════════════════════╝")
     pausa()
 
-def menu_integracion():
-    while True:
-        print()
-        titulo("  ∫  INTEGRACIÓN NUMÉRICA  ")
-        print()
-        print("  [1]  Regla del Trapecio     (aplicación múltiple)")
-        print("  [2]  Regla de Simpson 1/3   (aplicación múltiple)")
-        print("  [3]  Integración de Romberg (extrapolación Richardson)")
-        print("  [0]  ← Volver")
-        print()
-        linea()
-        op = pedir_opcion(["0", "1", "2", "3"])
-        if   op == "1": integracion_trapecio()
-        elif op == "2": integracion_simpson13()
-        elif op == "3": integracion_romberg()
-        elif op == "0": break
 
 # ── Menú del 1er Parcial ──────────────────────────────────────────
 def menu_primer_parcial():
@@ -639,7 +623,6 @@ def menu_primer_parcial():
         "9":  ("Generador de Despejes g(x)",            generador_despejes),
         "10": ("Regresión Lineal Múltiple",             regresion_lineal_multiple),
         "11": ("Polinomios de Lagrange",                lagrange),
-        "12": ("Integración Numérica  (Trapecio / Simpson 1/3 / Romberg)", menu_integracion),
     }
 
     while True:
@@ -2075,6 +2058,28 @@ def menu_segundo_parcial():
 
 
 # ══════════════════════════════════════════════════════════════════
+#  3er PARCIAL — INTEGRACIÓN NUMÉRICA
+# ══════════════════════════════════════════════════════════════════
+
+def menu_tercer_parcial():
+    while True:
+        print()
+        titulo("  📙  3er PARCIAL — Integración Numérica  ")
+        print()
+        print("  [1]  Regla del Trapecio     (aplicación múltiple)")
+        print("  [2]  Regla de Simpson 1/3   (aplicación múltiple)")
+        print("  [3]  Integración de Romberg (extrapolación Richardson)")
+        print("  [0]  ← Volver al menú principal")
+        print()
+        linea()
+        op = pedir_opcion(["0", "1", "2", "3"])
+        if   op == "1": integracion_trapecio()
+        elif op == "2": integracion_simpson13()
+        elif op == "3": integracion_romberg()
+        elif op == "0": break
+
+
+# ══════════════════════════════════════════════════════════════════
 #  MENÚ PRINCIPAL (selección de parcial)
 # ══════════════════════════════════════════════════════════════════
 
@@ -2086,28 +2091,32 @@ def menu_principal():
         print("╠══════════════════════════════════════════════════════════════╣")
         print("║                                                              ║")
         print("║   [1]  📘  1er PARCIAL  (Errores, Taylor, Raíces,           ║")
-        print("║                          Regresión, Lagrange,                ║")
-        print("║                          Trapecio, Simpson 1/3, Romberg...)  ║")
+        print("║                          Regresión, Lagrange...)             ║")
         print("║                                                              ║")
         print("║   [2]  📗  2do PARCIAL  (Jacobi, Seidel, Cramer,            ║")
         print("║                          Matriz Inversa, Gauss-Jordan,       ║")
         print("║                          Eliminación Gaussiana...)           ║")
+        print("║                                                              ║")
+        print("║   [3]  📙  3er PARCIAL  (Trapecio, Simpson 1/3,             ║")
+        print("║                          Romberg...)                         ║")
         print("║                                                              ║")
         print("║   [0]  🚪  Salir                                            ║")
         print("║                                                              ║")
         print("╚══════════════════════════════════════════════════════════════╝")
         print()
 
-        op = input("  Elige parcial (0/1/2): ").strip()
+        op = input("  Elige parcial (0/1/2/3): ").strip()
         if op == "1":
             menu_primer_parcial()
         elif op == "2":
             menu_segundo_parcial()
+        elif op == "3":
+            menu_tercer_parcial()
         elif op == "0":
             print("\n  ¡Éxito en los parciales! A romperla en la UVM 🚀\n")
             sys.exit(0)
         else:
-            print("  ⚠  Opción no válida. Elige 0, 1 o 2.")
+            print("  ⚠  Opción no válida. Elige 0, 1, 2 o 3.")
 
 
 # ══════════════════════════════════════════════════════════════════
