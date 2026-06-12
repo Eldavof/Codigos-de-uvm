@@ -1,0 +1,33 @@
+1. Red Física (PC del compañero)
+Conectar el cable Ethernet al switch.
+
+Apagar el Wi-Fi.
+
+Configurar IP estática en su adaptador Ethernet:
+
+IP: 10.0.0.3 (o .4, .5, etc. para cada amigo)
+
+Máscara: 255.255.255.0
+
+Puerta de enlace: 10.0.0.1
+
+2. Software (CMD del compañero)
+Instalar librería: pip install mysql-connector-python
+
+3. Código Python (mysql_servidor.py)
+Configurar las variables así:
+
+DB_HOST = "10.0.0.1"
+
+DB_PORT = 3306
+
+DB_USER = "admin_redes"
+
+DB_PASS = "tu_password_seguro"
+
+DB_NAME = "historia_mexico"
+
+4. Ejecución
+Abrir CMD y ejecutar: python mysql_servidor.py
+
+Contraseña del menú: Tragedias2026
